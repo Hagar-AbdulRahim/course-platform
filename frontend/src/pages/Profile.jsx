@@ -3,9 +3,12 @@ import { useAuth } from '../context/AuthContext';
 import axios from '../api/axios';
 import { Link } from 'react-router-dom';
 import { getFullUrl } from '../utils/urlHelper';
+import { useDispatch } from 'react-redux';
+import { fetchCourses } from '../store/slices/courseSlice';
 
 const Profile = () => {
   const { user, updateUser } = useAuth();
+  const dispatch = useDispatch();
   const [myCourses, setMyCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -55,6 +58,7 @@ const Profile = () => {
       setEditMode(null);
       setFormData({ title: '', description: '', price: 0, category: '' });
       fetchData();
+      dispatch(fetchCourses({ page: 1, keyword: '' }));
       setMessage('Operation successful!');
     } catch (err) { }
     finally { setCreating(false); }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCourseById } from '../store/slices/courseSlice';
@@ -17,7 +17,6 @@ const CourseDetail = () => {
   const [lessons, setLessons] = useState([]);
   const [enrolled, setEnrolled] = useState(false);
   const [enrolling, setEnrolling] = useState(false);
-  const [message, setMessage] = useState('');
 
   // Management States
   const [activeTab, setActiveTab] = useState(location.state?.activeTab || 'overview');
@@ -53,13 +52,7 @@ const CourseDetail = () => {
     checkEnrollment();
   }, [id, dispatch, user]);
 
-  useEffect(() => {
-    if (isInstructor && activeTab !== 'overview') {
-      fetchManagementData();
-    }
-  }, [activeTab, isInstructor]);
-
-  const fetchManagementData = async () => {
+  const fetchManagementData = useCallback(async () => {
     try {
       if (activeTab === 'students') {
         const { data } = await axios.get(`/enrollments/${id}/students`);
@@ -75,7 +68,13 @@ const CourseDetail = () => {
         }
       }
     } catch (err) { }
-  };
+  }, [activeTab, id]);
+
+  useEffect(() => {
+    if (isInstructor && activeTab !== 'overview') {
+      fetchManagementData();
+    }
+  }, [activeTab, isInstructor, fetchManagementData]);
 
   const handleEnrollClick = async () => {
     if (!user) { navigate('/login'); return; }
@@ -86,7 +85,6 @@ const CourseDetail = () => {
     try {
       await axios.post(`/enrollments/${id}`);
       setEnrolled(true);
-      setMessage('Registration Successful!');
     } catch (err) { }
     finally { setEnrolling(false); }
   };
@@ -250,7 +248,7 @@ const CourseDetail = () => {
                   {courseStudents.map(s => (
                     <tr key={s._id}>
                       <td className='p-4 font-bold flex items-center gap-3'>
-                        <img src={getFullUrl(s.profileImage, s.name)} className='w-8 h-8 rounded-full border shadow-sm' />
+                        <img src={getFullUrl(s.profileImage, s.name)} alt={s.name} className='w-8 h-8 rounded-full border shadow-sm' />
                         {s.name}
                       </td>
                       <td className='p-4 text-xs text-neutral-500'>
@@ -269,7 +267,7 @@ const CourseDetail = () => {
             <div className='space-y-4'>
               {courseComments.map(c => (
                 <div key={c._id} className='card p-5 border-none shadow-sm flex items-start gap-4'>
-                  <img src={getFullUrl(c.student?.profileImage)} className='w-10 h-10 rounded-full border shadow-sm' />
+                  <img src={getFullUrl(c.student?.profileImage)} alt={c.student?.name || 'Student'} className='w-10 h-10 rounded-full border shadow-sm' />
                   <div>
                     <p className='text-[10px] font-black uppercase text-brand mb-1'>{c.student?.name}</p>
                     <p className='text-xs text-neutral-600'>{c.content}</p>
