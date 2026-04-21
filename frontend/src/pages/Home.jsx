@@ -10,7 +10,7 @@ const Home = () => {
   const { courses, loading } = useSelector((state) => state.courses);
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
-  const [maxPrice, setMaxPrice] = useState(1000);
+
   const sliderRef = useRef(null);
 
   const coreCategories = ['All', 'Web Development', 'Graphic Design', 'Marketing', 'Business'];
@@ -22,8 +22,7 @@ const Home = () => {
   const filteredCourses = (courses || []).filter(course => {
     const matchesCategory = activeCategory === 'All' || course.category === activeCategory;
     const matchesSearch = course.title?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesPrice = (course.price || 0) <= maxPrice;
-    return matchesCategory && matchesSearch && matchesPrice;
+    return matchesCategory && matchesSearch;
   });
 
   const scrollSlider = (direction) => {
@@ -132,27 +131,7 @@ const Home = () => {
                 </div>
               </div>
 
-              <div className='space-y-8'>
-                <div className='flex justify-between items-center'>
-                  <p className='text-[11px] font-black uppercase tracking-[0.3em] text-brand-300 opacity-60'>Price Range</p>
-                  <span className='text-xs font-black text-white'>${maxPrice}</span>
-                </div>
-                <div className="px-2">
-                  <input
-                    type="range"
-                    min="0"
-                    max="1000"
-                    step="50"
-                    value={maxPrice}
-                    onChange={(e) => setMaxPrice(e.target.value)}
-                    className='w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-white'
-                  />
-                  <div className='flex justify-between mt-4 text-[9px] font-bold text-white/30 uppercase tracking-widest'>
-                    <span>$0</span>
-                    <span>$1000</span>
-                  </div>
-                </div>
-              </div>
+
             </div>
 
             {/* Right Column: Dynamic Slider */}

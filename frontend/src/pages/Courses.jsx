@@ -10,7 +10,7 @@ const Courses = () => {
   );
   const [keyword, setKeyword] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
-  const [maxPrice, setMaxPrice] = useState(1000);
+
 
   const coreCategories = ['All', 'Web Development', 'Graphic Design', 'Marketing', 'Business'];
 
@@ -22,8 +22,7 @@ const Courses = () => {
     const matchesKeyword = c.title?.toLowerCase().includes(keyword.toLowerCase()) || 
                           c.description?.toLowerCase().includes(keyword.toLowerCase());
     const matchesCategory = activeCategory === 'All' || c.category === activeCategory;
-    const matchesPrice = (c.price || 0) <= maxPrice;
-    return matchesKeyword && matchesCategory && matchesPrice;
+    return matchesKeyword && matchesCategory;
   });
 
   return (
@@ -70,22 +69,7 @@ const Courses = () => {
                       </div>
                     </div>
 
-                    <div className='space-y-6'>
-                       <div className='flex justify-between items-center'>
-                          <p className='text-[10px] font-black uppercase tracking-widest text-brand-200 opacity-50'>Price Limit</p>
-                          <span className='text-xs font-black text-white'>${maxPrice}</span>
-                       </div>
-                       <input 
-                          type="range" 
-                          min="0" 
-                          max="1000" 
-                          step="50"
-                          value={maxPrice}
-                          onChange={(e) => setMaxPrice(e.target.value)}
-                          className='w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-white'
-                       />
-                    </div>
-                  </div>
+                   </div>
 
                   <div className='md:col-span-3'>
                     {loading ? (
