@@ -60,7 +60,7 @@ const getMyCourses = async (req, res) => {
 const getCourseStudents = async (req, res) => {
   try {
     const enrollments = await Enrollment.find({ course: req.params.courseId })
-      .populate('student', 'name email country university faculty goal');
+      .populate('student', 'name email phoneNumber country university faculty goal');
 
     res.json({
       count: enrollments.length,

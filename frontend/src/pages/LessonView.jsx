@@ -231,7 +231,8 @@ const LessonView = () => {
                                  <img src={getFullUrl(s.profileImage) || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&auto=format&fit=crop'} className="w-10 h-10 rounded-xl object-cover" alt="S" />
                                  <div className="flex-1 min-w-0">
                                     <p className="text-xs font-bold truncate group-hover:text-brand transition-colors text-neutral-900 dark:text-white">{s.name}</p>
-                                    <p className="text-[9px] text-neutral-400 truncate uppercase mt-0.5">{s.country || 'International'}</p>
+                                    <p className="text-[9px] text-neutral-400 truncate mt-0.5">{s.email}</p>
+                                    <p className="text-[9px] text-brand truncate uppercase font-bold mt-0.5">{s.phoneNumber || 'No Mobile'}</p>
                                  </div>
                               </div>
                            ))}

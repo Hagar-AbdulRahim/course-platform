@@ -105,6 +105,7 @@ const CourseDetail = () => {
       setVideoFile(null);
       const { data } = await axios.get(`/courses/${id}/lessons`);
       setLessons(data.lessons);
+      dispatch(fetchCourseById(id));
     } catch (err) { }
     finally { setAddingLesson(false); }
   };
@@ -123,6 +124,7 @@ const CourseDetail = () => {
       setLessonForm({ title: '', content: '' });
       const { data } = await axios.get(`/courses/${id}/lessons`);
       setLessons(data.lessons);
+      dispatch(fetchCourseById(id));
     } catch (err) { }
     finally { setAddingLesson(false); }
   };
@@ -133,6 +135,7 @@ const CourseDetail = () => {
       await axios.delete(`/lessons/${lId}`);
       const { data } = await axios.get(`/courses/${id}/lessons`);
       setLessons(data.lessons);
+      dispatch(fetchCourseById(id));
     } catch (err) { }
   };
 
@@ -158,6 +161,10 @@ const CourseDetail = () => {
             <div>
               <p className='text-[8px] font-black text-brand uppercase tracking-widest'>Enrollment</p>
               <p className='text-white font-bold text-sm'>{course.studentsCount || 0} Students</p>
+            </div>
+            <div>
+              <p className='text-[8px] font-black text-brand uppercase tracking-widest'>Lessons</p>
+              <p className='text-white font-bold text-sm'>{course.lessonsCount || 0} Lessons</p>
             </div>
           </div>
         </div>
@@ -235,6 +242,7 @@ const CourseDetail = () => {
                 <thead className='bg-neutral-50 text-neutral-400'>
                   <tr>
                     <th className='p-4 text-[9px] uppercase font-black'>Student Name</th>
+                    <th className='p-4 text-[9px] uppercase font-black'>Contact (Email / Mobile)</th>
                     <th className='p-4 text-[9px] uppercase font-black'>Educational Info</th>
                   </tr>
                 </thead>
@@ -244,6 +252,10 @@ const CourseDetail = () => {
                       <td className='p-4 font-bold flex items-center gap-3'>
                         <img src={getFullUrl(s.profileImage, s.name)} className='w-8 h-8 rounded-full border shadow-sm' />
                         {s.name}
+                      </td>
+                      <td className='p-4 text-xs text-neutral-500'>
+                        <div>{s.email}</div>
+                        <div className="text-[10px] text-neutral-400 font-black mt-1">{s.phoneNumber || 'N/A'}</div>
                       </td>
                       <td className='p-4 text-xs text-neutral-500'>{s.university || 'Unspecified'}</td>
                     </tr>
